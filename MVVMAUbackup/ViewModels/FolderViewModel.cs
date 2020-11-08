@@ -22,23 +22,23 @@ namespace MVVMAUbackup.ViewModels
         public FolderViewModel()
         {
             _folders = new ObservableCollection<FolderModel>();
-            _time = new ObservableCollection<TimeModel>();
-            _backuptimer = new DispatcherTimer();
-            _backuptimer.Interval = TimeSpan.FromHours(8);
+            _time = new ObservableCollection<StatusModel>();
+            _backupTimer = new DispatcherTimer();
+            _backupTimer.Interval = TimeSpan.FromHours(8);
         }
         #endregion
 
         #region Fields
         private ObservableCollection<FolderModel> _folders;
-        private ObservableCollection<TimeModel> _time;
-        private DispatcherTimer _backuptimer;
+        private ObservableCollection<StatusModel> _time;
+        private DispatcherTimer _backupTimer;
         #endregion
 
         //Properties
         #region
-        public DispatcherTimer BackupTimer => _backuptimer;
+        public DispatcherTimer BackupTimer => _backupTimer;
         public ObservableCollection<FolderModel> Folders => _folders;
-        public ObservableCollection<TimeModel> Time => _time;
+        public ObservableCollection<StatusModel> Time => _time;
         #endregion
 
         //Commands
@@ -56,7 +56,7 @@ namespace MVVMAUbackup.ViewModels
         #region
         private bool CanAddFolders()
         {
-            if (_backuptimer.IsEnabled)
+            if (_backupTimer.IsEnabled)
                 return false;
 
             return true;
@@ -78,7 +78,7 @@ namespace MVVMAUbackup.ViewModels
 
         private bool CanRemoveFolder()
         {
-            if (_backuptimer.IsEnabled)
+            if (_backupTimer.IsEnabled)
                 return false;
             
             return true;
@@ -88,12 +88,11 @@ namespace MVVMAUbackup.ViewModels
             var Folder = FolderInfo as FolderModel;
             _folders.Remove(Folder);
         }
-        #endregion
 
 
         private bool CanAddBackupFolder() // Target
         {
-            if (_backuptimer.IsEnabled)
+            if (_backupTimer.IsEnabled)
                 return false;
 
             return true;
@@ -104,7 +103,7 @@ namespace MVVMAUbackup.ViewModels
             var OpenDialog = new FolderBrowserDialog();
             if (OpenDialog.ShowDialog() == DialogResult.OK)
             {
-                if(_folders.Any(x => x.FilePath == FolderModel.Target))
+                if (_folders.Any(x => x.FilePath == FolderModel.Target))
                 {
                     MessageBox.Show("The Backup folder cannot be in the Folder list that you want to Backup!");
                     return;
@@ -119,7 +118,7 @@ namespace MVVMAUbackup.ViewModels
         }
 
         ///Backup:
-       
+
         private bool CanStartTimer()
         {
             return _folders.Count > 0 && FolderModel.Target != null ? true : false;
@@ -127,20 +126,21 @@ namespace MVVMAUbackup.ViewModels
 
         private void StartOrPauseTimer(object parameters)
         {
-            TimeSpan ElapsedTime;
-            if (_backuptimer.IsEnabled)
+            TimeSpan CurrentTick = TimeSpan.FromSeconds(0);
+            if (_backupTimer.IsEnabled)
             {
-                ElapsedTime = _backuptimer.Interval;
-                _backuptimer.Stop();
+                CurrentTick = _backupTimer.Interval;
+                _backupTimer.Stop();
                 return;
             }
-            _backuptimer.Start();
+            _backupTimer.Interval = CurrentTick;
+            _backupTimer.Start();
             BackupProgress();
         }
 
         private void BackupProgress()
         {
-            Time.Add(new TimeModel { ElapsedTime = BackupTimer.Interval });
+            Time.Add(new StatusModel { ElapsedTime = BackupTimer.Interval });
         }
 
         private void BackupFolders()
@@ -155,5 +155,8 @@ namespace MVVMAUbackup.ViewModels
                 }
             });
         }
+        #endregion
+
+
     }
 }

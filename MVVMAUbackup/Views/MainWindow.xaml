@@ -94,8 +94,15 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock FontSize="14" Foreground="Silver" Text="{Binding Time.ElapsedTime, StringFormat=Time Left Until Backup {0}}"></TextBlock>
-                                <TextBlock FontSize="12" Foreground="Silver" Text="{Binding FilePath}"></TextBlock>
+                                <TextBlock FontSize="12" Foreground="Silver" Text="Time Left Until Backup: " >
+                                    <Run Text="{Binding ElapsedTime}" Foreground="Green" FontSize="11"></Run>
+                                </TextBlock>
+                                <TextBlock FontSize="12" Foreground="Silver" Text="Status: ">
+                                    <Run Text="{Binding BackupStatus}" Foreground="Green" FontSize="10"></Run>
+                                </TextBlock>
+                                <TextBlock FontSize="12" Foreground="Silver" Text="Finished at: ">
+                                    <Run Text="{Binding DateFinished}" Foreground="Green" FontSize="9"></Run>
+                                </TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

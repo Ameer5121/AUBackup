@@ -65,7 +65,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Models\BackupProgress.cs" />
     <Compile Include="Models\FolderModel.cs" />
-    <Compile Include="Models\TimeModel.cs" />
+    <Compile Include="Models\StatusModel.cs" />
     <Compile Include="ViewModels\FolderViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\App.xaml.cs">
