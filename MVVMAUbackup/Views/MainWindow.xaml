@@ -98,7 +98,7 @@
                                     <Run Text="{Binding ElapsedTime}" Foreground="Green" FontSize="11"></Run>
                                 </TextBlock>
                                 <TextBlock FontSize="12" Foreground="Silver" Text="Status: ">
-                                    <Run Text="{Binding BackupStatus}" Foreground="Green" FontSize="10"></Run>
+                                    <Run Text="{Binding BackupStatus}" Foreground="Orange" FontSize="12"></Run>
                                 </TextBlock>
                                 <TextBlock FontSize="12" Foreground="Silver" Text="Finished at: ">
                                     <Run Text="{Binding DateFinished}" Foreground="Green" FontSize="9"></Run>

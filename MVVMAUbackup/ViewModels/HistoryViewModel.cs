@@ -26,6 +26,7 @@ namespace MVVMAUbackup.ViewModels
                     BackupStatus = nameof(BackupProgress.NotStarted) 
                 }
             };
+            
             _updateProgress = new DispatcherTimer();
             _updateProgress.Interval = TimeSpan.FromSeconds(1);
             _updateProgress.Tick += UpdateStatus;
@@ -44,7 +45,7 @@ namespace MVVMAUbackup.ViewModels
         #endregion
 
         #region Methods
-        private void AddStatus()
+        public void AddStatus()
         {
             _time.Add(
                  new StatusModel
@@ -56,7 +57,11 @@ namespace MVVMAUbackup.ViewModels
         }
         private void UpdateStatus(object sender, EventArgs e)
         {
-            
+            var CurrentStatus = _time.Last();
+            if(CurrentStatus.ElapsedTime != TimeSpan.FromSeconds(0))
+            {
+                CurrentStatus.ElapsedTime -= TimeSpan.FromSeconds(1);
+            }
         }
         #endregion
     }

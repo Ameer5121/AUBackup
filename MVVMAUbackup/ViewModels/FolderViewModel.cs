@@ -23,22 +23,23 @@ namespace MVVMAUbackup.ViewModels
         {
             _folders = new ObservableCollection<FolderModel>();
             _backupTimer = new DispatcherTimer();
-            _backupTimer.Interval = TimeSpan.FromHours(8);
-            history = new HistoryViewModel();
+            _backupTimer.Interval = TimeSpan.FromSeconds(8);
+            _backupTimer.Tick += BackupFolders;
+            _history = new HistoryViewModel();
         }
         #endregion
 
         #region Fields
         private ObservableCollection<FolderModel> _folders;
         private static DispatcherTimer _backupTimer;
-        private HistoryViewModel history;
+        private HistoryViewModel _history;
         #endregion
 
 
         #region Properties
         public static DispatcherTimer BackupTimer => _backupTimer;
         public ObservableCollection<FolderModel> Folders => _folders;
-        public HistoryViewModel History => history;
+        public HistoryViewModel History => _history;
         #endregion
 
 
@@ -130,17 +131,18 @@ namespace MVVMAUbackup.ViewModels
             if (_backupTimer.IsEnabled)
             {
                 CurrentTick = _backupTimer.Interval;
-                history.UpdateProgress.Stop();
+                _history.UpdateProgress.Stop();
                 _backupTimer.Stop();
                 return;
             }
             _backupTimer.Interval = CurrentTick;
             _backupTimer.Start();
+            _history.UpdateProgress.Start();
         }
 
-        private void BackupFolders()
+        private async void BackupFolders(object sender, EventArgs e)
         {
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 foreach (FolderModel Folder in _folders)
                 {
@@ -149,6 +151,7 @@ namespace MVVMAUbackup.ViewModels
                     FileSystem.CopyDirectory(Folder.FilePath, $"{FolderModel.Target}\\{DirectoryName}", true);
                 }
             });
+            _history.AddStatus();
         }
         #endregion
 
