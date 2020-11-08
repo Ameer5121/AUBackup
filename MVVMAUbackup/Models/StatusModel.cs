@@ -9,10 +9,29 @@ namespace MVVMAUbackup.Models
 {
     class StatusModel : ViewModelBase
     {
-        private TimeSpan _elapsedTime;
-        private DateTime _dateFinished;
-        private bool _isBackupProcessRunning;
+        #region Constructor
+        public StatusModel()
+        {
+            _elapsedTime = new TimeSpan();
+        }
+        #endregion
 
+        #region Fields
+        private TimeSpan _elapsedTime;
+        private DateTime? _dateFinished;
+        private string _backupStatus;
+        #endregion
+
+        #region Properties
+        public DateTime? DateFinished
+        {
+            get => _dateFinished;
+            set
+            {
+                _dateFinished = value;
+                OnPropertyChanged();
+            }
+        }
         public TimeSpan ElapsedTime
         {
             get => _elapsedTime;
@@ -22,23 +41,16 @@ namespace MVVMAUbackup.Models
                 OnPropertyChanged();
             }
         }
-        public DateTime DateFinished
+        public string BackupStatus
         {
-            get => _dateFinished;
+            get => _backupStatus;
             set
             {
-                _dateFinished = value;
+                _backupStatus = value;
                 OnPropertyChanged();
             }
         }
-        public bool IsBackupProcessRunning
-        {
-            get => _isBackupProcessRunning;
-            set
-            {
-                _isBackupProcessRunning = value;
-                OnPropertyChanged();
-            }
-        }
+        #endregion
+
     }
 }

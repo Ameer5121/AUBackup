@@ -8,8 +8,9 @@ namespace MVVMAUbackup.Models
 {
     public enum BackupProgress
     {
-        Paused,
+        NotStarted,
         InProgress,
+        Paused,
         Finished
     }
 }

@@ -90,7 +90,7 @@
                     <Image Source="/Images/Expand.png" Height="18" Width="21"></Image>
                 </Button>
                 <!--End Of Expand Settings Button-->
-                <ListBox x:Name="History" Height="289" Background="Transparent" BorderBrush="Transparent" SelectionMode="Multiple" ItemsSource="{Binding Time}">
+                <ListBox x:Name="History" Height="319" Background="Transparent" BorderBrush="Transparent" SelectionMode="Multiple" ItemsSource="{Binding History.Time}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
@@ -275,7 +275,17 @@
                         </Button>
                         <!--End Of Add CurrentBackUpFolderInfo-->
 
-                        <Border x:Name="On" Opacity="0.1" Background="#FF25FF03" Margin="351,294,39,76" CornerRadius="100"></Border>
+                        <Border x:Name="On" Opacity="0.1" Background="#FF25FF03" Margin="351,294,39,76" CornerRadius="100">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding History.Time.IsBackupProcessRunning}" Value="false">
+                                            <Setter Property="Opacity" Value="1"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
                         <Border x:Name="Off" Opacity="0.1" Background="Red" Margin="385,294,5,76" CornerRadius="100"></Border>
 
                         <Border Background="Black" Height="2" RenderTransformOrigin="0.5,0.5" Margin="0,380,0,14"/>

@@ -22,38 +22,38 @@ namespace MVVMAUbackup.ViewModels
         public FolderViewModel()
         {
             _folders = new ObservableCollection<FolderModel>();
-            _time = new ObservableCollection<StatusModel>();
             _backupTimer = new DispatcherTimer();
             _backupTimer.Interval = TimeSpan.FromHours(8);
+            history = new HistoryViewModel();
         }
         #endregion
 
         #region Fields
         private ObservableCollection<FolderModel> _folders;
-        private ObservableCollection<StatusModel> _time;
-        private DispatcherTimer _backupTimer;
+        private static DispatcherTimer _backupTimer;
+        private HistoryViewModel history;
         #endregion
 
-        //Properties
-        #region
-        public DispatcherTimer BackupTimer => _backupTimer;
+
+        #region Properties
+        public static DispatcherTimer BackupTimer => _backupTimer;
         public ObservableCollection<FolderModel> Folders => _folders;
-        public ObservableCollection<StatusModel> Time => _time;
+        public HistoryViewModel History => history;
         #endregion
 
-        //Commands
-        #region
+
+        #region Commands
         public ICommand Add =>  new RelayCommand(AddFolders, CanAddFolders);      
         public ICommand Remove =>  new RelayCommand(RemoveFolder, CanRemoveFolder);
         public ICommand TargetFolder => new RelayCommand(AddBackupFolder, CanAddBackupFolder);
         public ICommand TargetName => new RelayCommand(BackupFolderName);
         public ICommand AddTarget => new RelayCommand(AddBackupFolder, CanAddBackupFolder);
         public ICommand StartTimer => new RelayCommand(StartOrPauseTimer, CanStartTimer);
-        
+
         #endregion
 
-        //Methods
-        #region
+
+        #region Methods
         private bool CanAddFolders()
         {
             if (_backupTimer.IsEnabled)
@@ -130,17 +130,12 @@ namespace MVVMAUbackup.ViewModels
             if (_backupTimer.IsEnabled)
             {
                 CurrentTick = _backupTimer.Interval;
+                history.UpdateProgress.Stop();
                 _backupTimer.Stop();
                 return;
             }
             _backupTimer.Interval = CurrentTick;
             _backupTimer.Start();
-            BackupProgress();
-        }
-
-        private void BackupProgress()
-        {
-            Time.Add(new StatusModel { ElapsedTime = BackupTimer.Interval });
         }
 
         private void BackupFolders()
