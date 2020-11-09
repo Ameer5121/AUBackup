@@ -25,21 +25,21 @@ namespace MVVMAUbackup.ViewModels
             _backupTimer = new DispatcherTimer();
             _backupTimer.Interval = TimeSpan.FromSeconds(8);
             _backupTimer.Tick += BackupFolders;
-            _history = new HistoryViewModel();
+            _history = new StatusViewModel();
         }
         #endregion
 
         #region Fields
         private ObservableCollection<FolderModel> _folders;
         private static DispatcherTimer _backupTimer;
-        private HistoryViewModel _history;
+        private StatusViewModel _history;
         #endregion
 
 
         #region Properties
         public static DispatcherTimer BackupTimer => _backupTimer;
         public ObservableCollection<FolderModel> Folders => _folders;
-        public HistoryViewModel History => _history;
+        public StatusViewModel History => _history;
         #endregion
 
 
@@ -48,7 +48,6 @@ namespace MVVMAUbackup.ViewModels
         public ICommand Remove =>  new RelayCommand(RemoveFolder, CanRemoveFolder);
         public ICommand TargetFolder => new RelayCommand(AddBackupFolder, CanAddBackupFolder);
         public ICommand TargetName => new RelayCommand(BackupFolderName);
-        public ICommand AddTarget => new RelayCommand(AddBackupFolder, CanAddBackupFolder);
         public ICommand StartTimer => new RelayCommand(StartOrPauseTimer, CanStartTimer);
 
         #endregion
@@ -140,9 +139,9 @@ namespace MVVMAUbackup.ViewModels
             _history.UpdateProgress.Start();
         }
 
-        private async void BackupFolders(object sender, EventArgs e)
+        private void BackupFolders(object sender, EventArgs e)
         {
-            await Task.Run(() =>
+             Task.Run(() =>
             {
                 foreach (FolderModel Folder in _folders)
                 {
@@ -151,7 +150,6 @@ namespace MVVMAUbackup.ViewModels
                     FileSystem.CopyDirectory(Folder.FilePath, $"{FolderModel.Target}\\{DirectoryName}", true);
                 }
             });
-            _history.AddStatus();
         }
         #endregion
 

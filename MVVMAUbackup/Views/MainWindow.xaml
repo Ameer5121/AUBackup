@@ -195,7 +195,7 @@
                         <!--End Of Add RemoveFolder-->
 
                         <!--SelectBackUpFolder-->
-                        <Button Name="SelectBackup" Background="Transparent" FontSize="15" Content="Select Backup Folder" Foreground="ForestGreen" Margin="151,323,121,46" Cursor="Hand" Command="{Binding AddTarget}">
+                        <Button Name="SelectBackup" Background="Transparent" FontSize="15" Content="Select Backup Folder" Foreground="ForestGreen" Margin="151,323,121,46" Cursor="Hand" Command="{Binding TargetFolder}">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                     <Style.Triggers>

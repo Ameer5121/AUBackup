@@ -13,10 +13,10 @@ using MVVMAUbackup.Models;
 using MVVMAUbackup.Commands;
 namespace MVVMAUbackup.ViewModels
 {
-    class HistoryViewModel : ViewModelBase
+    class StatusViewModel : ViewModelBase
     {
         #region Constructor
-        public HistoryViewModel()
+        public StatusViewModel()
         {
             _time = new ObservableCollection<StatusModel>()
             {
@@ -61,6 +61,12 @@ namespace MVVMAUbackup.ViewModels
             if(CurrentStatus.ElapsedTime != TimeSpan.FromSeconds(0))
             {
                 CurrentStatus.ElapsedTime -= TimeSpan.FromSeconds(1);
+            }
+            else
+            {
+                CurrentStatus.DateFinished = DateTime.Now;
+                CurrentStatus.BackupStatus = nameof(BackupProgress.Finished);
+                AddStatus();
             }
         }
         #endregion
