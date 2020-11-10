@@ -126,10 +126,9 @@ namespace MVVMAUbackup.ViewModels
 
         private void StartOrPauseTimer(object parameters)
         {
-            TimeSpan CurrentTick = TimeSpan.FromSeconds(0);
+            TimeSpan CurrentTick = _backupTimer.Interval;
             if (_backupTimer.IsEnabled)
             {
-                CurrentTick = _backupTimer.Interval;
                 _history.UpdateProgress.Stop();
                 _backupTimer.Stop();
                 return;
