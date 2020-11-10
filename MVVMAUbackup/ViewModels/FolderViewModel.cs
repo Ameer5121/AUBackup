@@ -25,21 +25,21 @@ namespace MVVMAUbackup.ViewModels
             _backupTimer = new DispatcherTimer();
             _backupTimer.Interval = TimeSpan.FromSeconds(8);
             _backupTimer.Tick += BackupFolders;
-            _history = new StatusViewModel();
+            _statusVM = new StatusViewModel();
         }
         #endregion
 
         #region Fields
         private ObservableCollection<FolderModel> _folders;
         private static DispatcherTimer _backupTimer;
-        private StatusViewModel _history;
+        private StatusViewModel _statusVM;
         #endregion
 
 
         #region Properties
         public static DispatcherTimer BackupTimer => _backupTimer;
         public ObservableCollection<FolderModel> Folders => _folders;
-        public StatusViewModel History => _history;
+        public StatusViewModel StatusVM => _statusVM;
         #endregion
 
 
@@ -48,7 +48,7 @@ namespace MVVMAUbackup.ViewModels
         public ICommand Remove =>  new RelayCommand(RemoveFolder, CanRemoveFolder);
         public ICommand TargetFolder => new RelayCommand(AddBackupFolder, CanAddBackupFolder);
         public ICommand TargetName => new RelayCommand(BackupFolderName);
-        public ICommand StartTimer => new RelayCommand(StartOrPauseTimer, CanStartTimer);
+        public ICommand StartBackupProcess => new RelayCommand(StartTimer, CanStartTimer);
 
         #endregion
 
@@ -124,18 +124,21 @@ namespace MVVMAUbackup.ViewModels
             return _folders.Count > 0 && FolderModel.Target != null ? true : false;
         }
 
-        private void StartOrPauseTimer(object parameters)
+        private void StartTimer(object parameters)
         {
-            TimeSpan CurrentTick = _backupTimer.Interval;
             if (_backupTimer.IsEnabled)
-            {
-                _history.UpdateProgress.Stop();
-                _backupTimer.Stop();
-                return;
-            }
-            _backupTimer.Interval = CurrentTick;
+                PauseTimer();
+
             _backupTimer.Start();
-            _history.UpdateProgress.Start();
+            _statusVM.StartProcess();
+        }
+
+        private void PauseTimer()
+        {
+            TimeSpan CurrentTick = _backupTimer.Interval; // Saves our current interval
+            _backupTimer.Interval = CurrentTick;   
+            _statusVM.PauseProcess();
+            _backupTimer.Stop();
         }
 
         private void BackupFolders(object sender, EventArgs e)

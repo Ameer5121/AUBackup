@@ -90,7 +90,7 @@
                     <Image Source="/Images/Expand.png" Height="18" Width="21"></Image>
                 </Button>
                 <!--End Of Expand Settings Button-->
-                <ListBox x:Name="History" Height="319" Background="Transparent" BorderBrush="Transparent" SelectionMode="Multiple" ItemsSource="{Binding History.Time}">
+                <ListBox x:Name="History" Height="319" Background="Transparent" BorderBrush="Transparent" SelectionMode="Multiple" ItemsSource="{Binding StatusVM.Statuses}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
@@ -222,7 +222,7 @@
                         <!--End Of Add SelectBackUpFolder-->
 
                         <!--StartBackupButton-->
-                        <Button Name="StartBackup" Background="Transparent" FontSize="17" Content="Start/Stop Automatic Backup" Foreground="Orange" Margin="126,292,71,76" Cursor="Hand" Command="{Binding StartTimer}">
+                        <Button Name="StartBackup" Background="Transparent" FontSize="17" Content="Start/Stop Automatic Backup" Foreground="Orange" Margin="126,292,71,76" Cursor="Hand" Command="{Binding StartBackupProcess}">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                     <Style.Triggers>

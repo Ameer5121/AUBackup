@@ -15,10 +15,11 @@ namespace MVVMAUbackup.ViewModels
 {
     class StatusViewModel : ViewModelBase
     {
+        
         #region Constructor
         public StatusViewModel()
         {
-            _time = new ObservableCollection<StatusModel>()
+            _statuses = new ObservableCollection<StatusModel>()
             {
                 new StatusModel{
                     ElapsedTime = FolderViewModel.BackupTimer.Interval,
@@ -26,28 +27,28 @@ namespace MVVMAUbackup.ViewModels
                     BackupStatus = nameof(BackupProgress.NotStarted) 
                 }
             };
-            
+
             _updateProgress = new DispatcherTimer();
             _updateProgress.Interval = TimeSpan.FromSeconds(1);
-            _updateProgress.Tick += UpdateStatus;
+            _updateProgress.Tick += UpdateElapsedTime;
         }
         #endregion
 
         #region Fields
-        private ObservableCollection<StatusModel> _time;
+        private ObservableCollection<StatusModel> _statuses;
         private DispatcherTimer _updateProgress;
         #endregion
 
         
         #region Properties
-        public ObservableCollection<StatusModel> Time => _time;
+        public ObservableCollection<StatusModel> Statuses => _statuses;
         public DispatcherTimer UpdateProgress => _updateProgress;
         #endregion
 
         #region Methods
         public void AddStatus()
         {
-            _time.Add(
+            _statuses.Add(
                  new StatusModel
                  {
                      ElapsedTime = FolderViewModel.BackupTimer.Interval,
@@ -55,19 +56,36 @@ namespace MVVMAUbackup.ViewModels
                      BackupStatus = nameof(BackupProgress.InProgress)
                  });
         }
-        private void UpdateStatus(object sender, EventArgs e)
+        private void UpdateElapsedTime(object sender, EventArgs e)
         {
-            var CurrentStatus = _time.Last();
+            var CurrentStatus = _statuses.Last();
             if(CurrentStatus.ElapsedTime != TimeSpan.FromSeconds(0))
             {
                 CurrentStatus.ElapsedTime -= TimeSpan.FromSeconds(1);
-            }
-            else
-            {
-                CurrentStatus.DateFinished = DateTime.Now;
-                CurrentStatus.BackupStatus = nameof(BackupProgress.Finished);
-                AddStatus();
-            }
+                return;
+            }             
+            UpdateFinishedProcess();      
+        }
+
+        public void PauseProcess()
+        {
+            var CurrentStatus = _statuses.Last();
+            CurrentStatus.BackupStatus = nameof(BackupProgress.Paused);
+            _updateProgress.Stop();
+        }
+        public void StartProcess()
+        {
+            var CurrentStatus = _statuses.Last();
+            CurrentStatus.BackupStatus = nameof(BackupProgress.InProgress);
+            _updateProgress.Start();
+        }
+
+        private void UpdateFinishedProcess()
+        {
+            var CurrentStatus = _statuses.Last();
+            CurrentStatus.DateFinished = DateTime.Now;
+            CurrentStatus.BackupStatus = nameof(BackupProgress.Finished);
+            AddStatus();
         }
         #endregion
     }
