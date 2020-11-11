@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using MVVMAUbackup.Models;
 using MVVMAUbackup.Commands;
+using System.Runtime.Serialization;
 
 namespace MVVMAUbackup.ViewModels
 {
-    class FolderViewModel
+    [Serializable]
+    class FolderViewModel : ISerializable
     {
      
 
@@ -126,17 +129,22 @@ namespace MVVMAUbackup.ViewModels
 
         private void StartTimer(object parameters)
         {
+            var StopWatch = new Stopwatch();
             if (_backupTimer.IsEnabled)
-                PauseTimer();
-
+            {
+                PauseTimer(StopWatch);
+                StopWatch.Reset();
+                return;
+            }
             _backupTimer.Start();
+            StopWatch.Start();
             _statusVM.StartProcess();
         }
 
-        private void PauseTimer()
+        private void PauseTimer(Stopwatch ElapsedTime)
         {
-            TimeSpan CurrentTick = _backupTimer.Interval; // Saves our current interval
-            _backupTimer.Interval = CurrentTick;   
+
+            _backupTimer.Interval = ElapsedTime.Elapsed;    
             _statusVM.PauseProcess();
             _backupTimer.Stop();
         }
@@ -154,6 +162,23 @@ namespace MVVMAUbackup.ViewModels
             });
         }
         #endregion
+
+
+        #region Serialization
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            foreach(FolderModel Folder in _folders)
+            {
+                info.AddValue(Folder.Name, Folder);
+            }
+        }
+
+        public FolderViewModel(SerializationInfo info, StreamingContext context)
+        {
+
+        }
+        #endregion
+
 
 
     }

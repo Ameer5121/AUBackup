@@ -15,5 +15,6 @@ namespace MVVMAUbackup.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
     }
 }

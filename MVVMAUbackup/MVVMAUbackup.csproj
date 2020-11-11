@@ -66,6 +66,7 @@
     <Compile Include="Models\BackupProgress.cs" />
     <Compile Include="Models\FolderModel.cs" />
     <Compile Include="Models\StatusModel.cs" />
+    <Compile Include="Serialization\Serializer.cs" />
     <Compile Include="ViewModels\FolderViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -104,9 +105,7 @@
   <ItemGroup>
     <None Include="Views\App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Serialization\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\Exit.png" />
     <Resource Include="Images\Expand.png" />
