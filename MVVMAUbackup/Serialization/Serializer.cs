@@ -7,7 +7,7 @@ using System.Windows;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using MVVMAUbackup.Models;
+using MVVMAUbackup.ViewModels;
 
 
 namespace MVVMAUbackup.Serialization
@@ -16,31 +16,29 @@ namespace MVVMAUbackup.Serialization
     {
         private static BinaryFormatter binaryIO = new BinaryFormatter();
 
-        public static void Serialize(FolderModel FM, StatusModel SM)
+        public static void Serialize(FolderViewModel FM)
         {
             try
             {
                 using (Stream stream = File.Create(@"./History.dat"))
                 {
-
+                    binaryIO.Serialize(stream, FM);
                 }
             }
             catch (Exception e) { MessageBox.Show(e.Message); }
 
         }
-        public static void DeSerialize()
+        public static void DeSerialize(ref FolderViewModel FM)
         {
-            if (File.Exists(@"./History.dat"))
-            {
                 try
                 {
                     using (Stream stream = File.Open(@"./History.dat", FileMode.Open))
                     {
-
+                        FM = (FolderViewModel)binaryIO.Deserialize(stream);
                     }
                 }
-                catch (Exception e) { }
-            }          
+                catch (Exception e) { MessageBox.Show(e.Message); }
+                     
         }
     }
 }

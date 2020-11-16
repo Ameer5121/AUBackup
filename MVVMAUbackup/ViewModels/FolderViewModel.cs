@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using MVVMAUbackup.Models;
 using MVVMAUbackup.Commands;
+using MVVMAUbackup.Serialization;
 using System.Runtime.Serialization;
 
 namespace MVVMAUbackup.ViewModels
@@ -19,16 +20,15 @@ namespace MVVMAUbackup.ViewModels
     [Serializable]
     class FolderViewModel : ISerializable
     {
-     
-
         #region Constructor
         public FolderViewModel()
         {
+
             _folders = new ObservableCollection<FolderModel>();
             _backupTimer = new DispatcherTimer();
             _backupTimer.Interval = TimeSpan.FromSeconds(8);
             _backupTimer.Tick += BackupFolders;
-            _statusVM = new StatusViewModel();
+            _statusVM = new StatusViewModel();           
         }
         #endregion
 
@@ -52,6 +52,7 @@ namespace MVVMAUbackup.ViewModels
         public ICommand TargetFolder => new RelayCommand(AddBackupFolder, CanAddBackupFolder);
         public ICommand TargetName => new RelayCommand(BackupFolderName);
         public ICommand StartBackupProcess => new RelayCommand(StartTimer, CanStartTimer);
+        public ICommand Save => new RelayCommand(Serialize);
 
         #endregion
 
@@ -152,7 +153,7 @@ namespace MVVMAUbackup.ViewModels
         private void BackupFolders(object sender, EventArgs e)
         {
              Task.Run(() =>
-            {
+             {
                 foreach (FolderModel Folder in _folders)
                 {
                     var DirectoryName = Path.GetFileName(Folder.FilePath);
@@ -165,17 +166,40 @@ namespace MVVMAUbackup.ViewModels
 
 
         #region Serialization
+
+        private void Serialize(object parameters)
+        {
+            if (_backupTimer.IsEnabled)
+            {
+                MessageBox.Show("Please pause the backup process before exiting.");
+                return;
+            }
+            Serializer.Serialize(this);
+            //Environment.Exit(0);
+        }
+            
+        public FolderViewModel Deserialize()
+        {
+            FolderViewModel DeserializedClass = null;
+            Serializer.DeSerialize(ref DeserializedClass);
+            return DeserializedClass == null ? this : DeserializedClass;
+        }
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            foreach(FolderModel Folder in _folders)
-            {
-                info.AddValue(Folder.Name, Folder);
-            }
+            info.AddValue("Folders", _folders);
+            info.AddValue("Status", _statusVM);
+            info.AddValue("BackupTimerInterval", _backupTimer.Interval);
         }
+
+
 
         public FolderViewModel(SerializationInfo info, StreamingContext context)
         {
-
+            _folders = (ObservableCollection<FolderModel>)info.GetValue("Folders", typeof(ObservableCollection<FolderModel>));
+            _statusVM = (StatusViewModel)info.GetValue("Status", typeof(StatusViewModel));
+            _backupTimer = new DispatcherTimer();
+            _backupTimer.Tick += BackupFolders;
+            _backupTimer.Interval = (TimeSpan)info.GetValue("BackupTimerInterval", typeof(TimeSpan));
         }
         #endregion
 

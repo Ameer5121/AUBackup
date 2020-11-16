@@ -7,7 +7,8 @@ using MVVMAUbackup.ViewModels;
 
 namespace MVVMAUbackup.Models
 {
-    class FolderModel : ViewModelBase
+    [Serializable]
+    class FolderModel
     {
         private string _name;
         private string _filepath;
@@ -19,7 +20,6 @@ namespace MVVMAUbackup.Models
             set 
             {
                 _name = value;
-                OnPropertyChanged(); 
             }
         }
         public string FilePath
@@ -28,7 +28,6 @@ namespace MVVMAUbackup.Models
             set 
             {
                 _filepath = value;
-                OnPropertyChanged(); 
             }
         }
     }

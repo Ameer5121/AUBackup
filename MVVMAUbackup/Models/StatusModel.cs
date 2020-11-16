@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MVVMAUbackup.ViewModels;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 
 namespace MVVMAUbackup.Models
 {
+    [Serializable]
     class StatusModel : ViewModelBase
     {
         #region Constructor
@@ -52,5 +56,7 @@ namespace MVVMAUbackup.Models
         }
         #endregion
 
+
+      
     }
 }

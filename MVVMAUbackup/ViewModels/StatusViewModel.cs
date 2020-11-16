@@ -11,9 +11,12 @@ using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using MVVMAUbackup.Models;
 using MVVMAUbackup.Commands;
+using System.Runtime.Serialization;
+
 namespace MVVMAUbackup.ViewModels
 {
-    class StatusViewModel : ViewModelBase
+    [Serializable]
+    class StatusViewModel : ISerializable
     {
         
         #region Constructor
@@ -27,7 +30,6 @@ namespace MVVMAUbackup.ViewModels
                     BackupStatus = nameof(BackupProgress.NotStarted) 
                 }
             };
-
             _updateProgress = new DispatcherTimer();
             _updateProgress.Interval = TimeSpan.FromSeconds(1);
             _updateProgress.Tick += UpdateElapsedTime;
@@ -86,6 +88,20 @@ namespace MVVMAUbackup.ViewModels
             CurrentStatus.DateFinished = DateTime.Now;
             CurrentStatus.BackupStatus = nameof(BackupProgress.Finished);
             AddStatus();
+        }
+        #endregion
+
+
+        #region Serialization
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Statuses", _statuses);
+        }
+
+        public StatusViewModel(SerializationInfo info, StreamingContext context) : this()
+        {
+            _statuses = (ObservableCollection<StatusModel>)info.GetValue("Statuses", typeof(ObservableCollection<StatusModel>));
+
         }
         #endregion
     }
