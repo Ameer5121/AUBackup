@@ -28,6 +28,7 @@ namespace MVVMAUbackup.ViewModels
             _backupTimer = new DispatcherTimer();
             _backupTimer.Interval = TimeSpan.FromSeconds(8);
             _backupTimer.Tick += BackupFolders;
+            _backupTimer.Tick += RestartInterval;
             _statusVM = new StatusViewModel();           
         }
         #endregion
@@ -36,6 +37,7 @@ namespace MVVMAUbackup.ViewModels
         private ObservableCollection<FolderModel> _folders;
         private static DispatcherTimer _backupTimer;
         private StatusViewModel _statusVM;
+        private static Stopwatch StopWatch = new Stopwatch();
         #endregion
 
 
@@ -129,30 +131,29 @@ namespace MVVMAUbackup.ViewModels
         }
 
         private void StartTimer(object parameters)
-        {
-            var StopWatch = new Stopwatch();
+        {         
             if (_backupTimer.IsEnabled)
             {
+                StopWatch.Stop();
                 PauseTimer(StopWatch);
-                StopWatch.Reset();
                 return;
             }
-            _backupTimer.Start();
             StopWatch.Start();
+            _backupTimer.Start();
             _statusVM.StartProcess();
         }
-
         private void PauseTimer(Stopwatch ElapsedTime)
         {
-
-            _backupTimer.Interval = ElapsedTime.Elapsed;    
-            _statusVM.PauseProcess();
             _backupTimer.Stop();
+            _backupTimer.Interval -= TimeSpan.FromSeconds(ElapsedTime.Elapsed.TotalSeconds);    
+            _statusVM.PauseProcess();
+            StopWatch.Reset();
         }
 
-        private void BackupFolders(object sender, EventArgs e)
-        {
-             Task.Run(() =>
+        private async void BackupFolders(object sender, EventArgs e)
+        {    
+            //MessageBox.Show("s");
+             await Task.Run(() =>
              {
                 foreach (FolderModel Folder in _folders)
                 {
@@ -161,6 +162,17 @@ namespace MVVMAUbackup.ViewModels
                     FileSystem.CopyDirectory(Folder.FilePath, $"{FolderModel.Target}\\{DirectoryName}", true);
                 }
             });
+            _statusVM.UpdateFinishedProcess();
+        }
+        /// <summary>
+        /// Resets the interval of the backup process after every cycle incase the user pauses it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RestartInterval(object sender, EventArgs e)
+        {
+            _backupTimer.Interval = TimeSpan.FromSeconds(8);
+            StopWatch.Restart();
         }
         #endregion
 
@@ -199,6 +211,7 @@ namespace MVVMAUbackup.ViewModels
             _statusVM = (StatusViewModel)info.GetValue("Status", typeof(StatusViewModel));
             _backupTimer = new DispatcherTimer();
             _backupTimer.Tick += BackupFolders;
+            _backupTimer.Tick += RestartInterval;
             _backupTimer.Interval = (TimeSpan)info.GetValue("BackupTimerInterval", typeof(TimeSpan));
         }
         #endregion

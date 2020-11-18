@@ -19,7 +19,7 @@
         <Border Background="#FF191919" Margin="0,0,0,444">
             <StackPanel>
                 <!--Exit Button-->
-                <Button Name="ExitButton" Background="Transparent" Height="37" Width="39" Margin="587,-1,0,0" Cursor="Hand" Foreground="#00000000">
+                <Button Name="ExitButton" Background="Transparent" Height="37" Width="39" Margin="587,-5,0,0" Cursor="Hand" Foreground="#00000000" Command="{Binding Save}">
                     <Image Source="/Images/Exit.png" Height="35" ></Image>
 
                     <Button.Style>
@@ -94,14 +94,14 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock FontSize="12" Foreground="Silver" Text="Time Left Until Backup: " >
-                                    <Run Text="{Binding ElapsedTime}" Foreground="Green" FontSize="11"></Run>
+                                <TextBlock FontSize="9" Foreground="Silver" Text="Time Left Until Backup: " >
+                                    <Run Text="{Binding ElapsedTime}" Foreground="Green" FontSize="13"></Run>
                                 </TextBlock>
-                                <TextBlock FontSize="12" Foreground="Silver" Text="Status: ">
-                                    <Run Text="{Binding BackupStatus}" Foreground="Orange" FontSize="12"></Run>
+                                <TextBlock FontSize="10" Foreground="Silver" Text="Status: ">
+                                    <Run Text="{Binding BackupStatus}" Foreground="Orange" FontSize="10"></Run>
                                 </TextBlock>
-                                <TextBlock FontSize="12" Foreground="Silver" Text="Finished at: ">
-                                    <Run Text="{Binding DateFinished}" Foreground="Green" FontSize="9"></Run>
+                                <TextBlock FontSize="10" Foreground="Silver" Text="Finished at: ">
+                                    <Run Text="{Binding DateFinished}" Foreground="Green" FontSize="10"></Run>
                                 </TextBlock>
                             </StackPanel>
                         </DataTemplate>
@@ -291,7 +291,6 @@
 
                         <Border Background="Black" Height="2" RenderTransformOrigin="0.5,0.5" Margin="0,380,0,14"/>
                         <Border Background="Black" Height="2" RenderTransformOrigin="0.5,0.5" Margin="0,286,0,105"></Border>
-                        <Button Background="Black" Margin="338,327,43,28" Command="{Binding Save}"></Button>
                     </Grid>
                 </Border>
                 <!--End Of Expand Of Backup-->

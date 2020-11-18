@@ -64,9 +64,7 @@ namespace MVVMAUbackup.ViewModels
             if(CurrentStatus.ElapsedTime != TimeSpan.FromSeconds(0))
             {
                 CurrentStatus.ElapsedTime -= TimeSpan.FromSeconds(1);
-                return;
-            }             
-            UpdateFinishedProcess();      
+            }
         }
 
         public void PauseProcess()
@@ -82,7 +80,7 @@ namespace MVVMAUbackup.ViewModels
             _updateProgress.Start();
         }
 
-        private void UpdateFinishedProcess()
+        public void UpdateFinishedProcess()
         {
             var CurrentStatus = _statuses.Last();
             CurrentStatus.DateFinished = DateTime.Now;
