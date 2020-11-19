@@ -142,9 +142,9 @@ namespace MVVMAUbackup.ViewModels
                 PauseTimer(StopWatch);
                 return;
             }
-            StopWatch.Start();
-            _backupTimer.Start();
             _statusVM.StartProcess();
+            _backupTimer.Start();
+            StopWatch.Start();
         }
         private void PauseTimer(Stopwatch ElapsedTime)
         {
@@ -154,9 +154,9 @@ namespace MVVMAUbackup.ViewModels
             StopWatch.Reset();
         }
 
-        private async void BackupFolders(object sender, EventArgs e)
+        private  void BackupFolders(object sender, EventArgs e)
         {
-             await Task.Run(() =>
+             Task.Run(() =>
              {
                 foreach (FolderModel Folder in _folders)
                 {
@@ -165,7 +165,6 @@ namespace MVVMAUbackup.ViewModels
                     FileSystem.CopyDirectory(Folder.FilePath, $"{FolderModel.Target}\\{DirectoryName}", true);
                 }
             });
-           _statusVM.UpdateFinishedProcess();
         }
         /// <summary>
         /// Resets the interval of the backup process after every cycle incase the user pauses it.

@@ -64,20 +64,22 @@ namespace MVVMAUbackup.ViewModels
             if(CurrentStatus.ElapsedTime != TimeSpan.FromSeconds(0))
             {
                 CurrentStatus.ElapsedTime -= TimeSpan.FromSeconds(1);
+                return;
             }
+            UpdateFinishedProcess();
         }
 
         public void PauseProcess()
         {
+            _updateProgress.Stop();
             var CurrentStatus = _statuses.First();
             CurrentStatus.BackupStatus = nameof(BackupProgress.Paused);
-            _updateProgress.Stop();
         }
         public void StartProcess()
         {
+            _updateProgress.Start();
             var CurrentStatus = _statuses.First();
             CurrentStatus.BackupStatus = nameof(BackupProgress.InProgress);
-            _updateProgress.Start();
         }
 
         public void UpdateFinishedProcess()
