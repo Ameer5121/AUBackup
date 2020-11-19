@@ -155,7 +155,7 @@ namespace MVVMAUbackup.ViewModels
         }
 
         private async void BackupFolders(object sender, EventArgs e)
-        {    
+        {
              await Task.Run(() =>
              {
                 foreach (FolderModel Folder in _folders)
@@ -165,7 +165,7 @@ namespace MVVMAUbackup.ViewModels
                     FileSystem.CopyDirectory(Folder.FilePath, $"{FolderModel.Target}\\{DirectoryName}", true);
                 }
             });
-            _statusVM.UpdateFinishedProcess();
+           _statusVM.UpdateFinishedProcess();
         }
         /// <summary>
         /// Resets the interval of the backup process after every cycle incase the user pauses it.
