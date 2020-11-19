@@ -202,6 +202,7 @@ namespace MVVMAUbackup.ViewModels
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Folders", _folders);
+            info.AddValue("Target", FolderModel.Target);
             info.AddValue("Status", _statusVM);
             info.AddValue("BackupTimerInterval", _backupTimer.Interval);
         }
@@ -211,6 +212,7 @@ namespace MVVMAUbackup.ViewModels
         public FolderViewModel(SerializationInfo info, StreamingContext context) : this()
         {
             _folders = (ObservableCollection<FolderModel>)info.GetValue("Folders", typeof(ObservableCollection<FolderModel>));
+            FolderModel.Target = (string)info.GetValue("Target", typeof(string));
             _statusVM = (StatusViewModel)info.GetValue("Status", typeof(StatusViewModel));
             _backupTimer.Interval = (TimeSpan)info.GetValue("BackupTimerInterval", typeof(TimeSpan));
         }
