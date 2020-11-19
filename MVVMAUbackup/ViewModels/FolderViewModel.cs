@@ -27,7 +27,7 @@ namespace MVVMAUbackup.ViewModels
 
             _folders = new ObservableCollection<FolderModel>();
             _backupTimer = new DispatcherTimer();
-            _backupTimer.Interval = TimeSpan.FromSeconds(8);
+            _backupTimer.Interval = TimeSpan.FromHours(8);
             _backupTimer.Tick += BackupFolders;
             _backupTimer.Tick += RestartInterval;
             _statusVM = new StatusViewModel();
@@ -173,7 +173,7 @@ namespace MVVMAUbackup.ViewModels
         /// <param name="e"></param>
         private void RestartInterval(object sender, EventArgs e)
         {
-            _backupTimer.Interval = TimeSpan.FromSeconds(8);
+            _backupTimer.Interval = TimeSpan.FromHours(8);
             StopWatch.Restart();
         }
         #endregion
