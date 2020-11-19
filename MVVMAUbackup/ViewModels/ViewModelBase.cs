@@ -20,5 +20,7 @@ namespace MVVMAUbackup.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        public void Exit() { Environment.Exit(0); }
+
     }
 }

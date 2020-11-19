@@ -30,3 +30,4 @@ D:\Projects\Gits\MVVMBackup\MVVMAUbackup\obj\Debug\MVVMAUbackup.csproj.GenerateR
 D:\Projects\Gits\MVVMBackup\MVVMAUbackup\obj\Debug\MVVMAUbackup.csproj.CoreCompileInputs.cache
 D:\Projects\Gits\MVVMBackup\MVVMAUbackup\obj\Debug\MVVMAUbackup.exe
 D:\Projects\Gits\MVVMBackup\MVVMAUbackup\obj\Debug\MVVMAUbackup.pdb
+D:\Projects\Gits\MVVMBackup\MVVMAUbackup\obj\Debug\GeneratedInternalTypeHelper.g.cs

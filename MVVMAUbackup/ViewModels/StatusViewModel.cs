@@ -48,9 +48,9 @@ namespace MVVMAUbackup.ViewModels
         #endregion
 
         #region Methods
-        public void AddStatus()
+        private void AddStatus()
         {
-            _statuses.Add(
+            _statuses.Insert(0,
                  new StatusModel
                  {
                      ElapsedTime = FolderViewModel.BackupTimer.Interval,
@@ -60,7 +60,7 @@ namespace MVVMAUbackup.ViewModels
         }
         private void UpdateElapsedTime(object sender, EventArgs e)
         {
-            var CurrentStatus = _statuses.Last();
+            var CurrentStatus = _statuses.First();
             if(CurrentStatus.ElapsedTime != TimeSpan.FromSeconds(0))
             {
                 CurrentStatus.ElapsedTime -= TimeSpan.FromSeconds(1);
@@ -69,20 +69,20 @@ namespace MVVMAUbackup.ViewModels
 
         public void PauseProcess()
         {
-            var CurrentStatus = _statuses.Last();
+            var CurrentStatus = _statuses.First();
             CurrentStatus.BackupStatus = nameof(BackupProgress.Paused);
             _updateProgress.Stop();
         }
         public void StartProcess()
         {
-            var CurrentStatus = _statuses.Last();
+            var CurrentStatus = _statuses.First();
             CurrentStatus.BackupStatus = nameof(BackupProgress.InProgress);
             _updateProgress.Start();
         }
 
         public void UpdateFinishedProcess()
         {
-            var CurrentStatus = _statuses.Last();
+            var CurrentStatus = _statuses.First();
             CurrentStatus.DateFinished = DateTime.Now;
             CurrentStatus.BackupStatus = nameof(BackupProgress.Finished);
             AddStatus();

@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MVVMAUbackup"
+        xmlns:Converter="clr-namespace:MVVMAUbackup.MultiConvertor"
         mc:Ignorable="d"
         Title="MainWindow" Height="473.65" Width="625.571" ResizeMode="NoResize" Background="Transparent" 
-        WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStyle="None">
+        WindowStartupLocation="CenterScreen" MouseLeftButtonDown="Window_MouseLeftButtonDown" WindowStyle="None" StateChanged="Window_StateChanged">
+    <Window.Resources>
+        <Converter:Convertor x:Key="MyMultiConverter"/>
+    </Window.Resources>
     <Grid Name="Main" Background="#FF343333">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -48,7 +52,7 @@
                 <!--End Of Exit Button-->
 
                 <!--Minimize Button-->
-                <Button Name="MinimizeButton" Background="Transparent" Height="36" Width="39" Margin="544,-35,44,0" Cursor="Hand">
+                <Button Name="MinimizeButton" Background="Transparent" Height="36" Width="39" Margin="544,-35,44,0" Cursor="Hand" Click="Minimize">
                     <Image Source="/Images/Minimize.png" Height="34"></Image>
 
                     <Button.Style>
@@ -79,14 +83,20 @@
         </Border>
 
         <!--Settings-->
-        <Border Name="SettingsPanel" Background="#FF464545"  CornerRadius="3" Margin="444,30,0,99" RenderTransformOrigin="0.5,0.5">
+        <Border Name="SettingsPanel" Height="24" Background="#FF464545"  CornerRadius="3" Margin="444,30,0,420" RenderTransformOrigin="0.5,0.5">
             <StackPanel>
                 <TextBlock TextAlignment="Center" Text="History" FontSize="20" Foreground="DarkOliveGreen" Margin="26,-4,16,0" Width="76" Height="27"/>
                 <!--Expand Settings Button-->
-                <Button x:Name="SettingsButton" Background="Transparent" Margin="10,-20,148,0" Height="21" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button x:Name="SettingsButton" Background="Transparent" Margin="10,-20,148,0" Height="21" Cursor="Hand" RenderTransformOrigin="0.5,0.5" Command="{Binding Animation.SettingsExpand}">
                     <Button.RenderTransform>
                         <RotateTransform></RotateTransform>
                     </Button.RenderTransform>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MyMultiConverter}">
+                            <Binding ElementName="SettingsPanel"></Binding>
+                            <Binding ElementName="SettingsButton"></Binding>
+                        </MultiBinding>
+                    </Button.CommandParameter>
                     <Image Source="/Images/Expand.png" Height="18" Width="21"></Image>
                 </Button>
                 <!--End Of Expand Settings Button-->
@@ -112,14 +122,20 @@
         <!--End Of Settings-->
 
         <!--Backup-->
-        <Border Name="BackupPanel" Background="#FF464545" Margin="0,30,187,10" CornerRadius="3">
+        <Border Name="BackupPanel" Height="24" Background="#FF464545" Margin="0,30,187,420" CornerRadius="3">
             <StackPanel>
                 <TextBlock TextAlignment="Center" Text="Backup" FontSize="15" Foreground="Silver" Margin="137,0,156,0" Height="22"/>
                 <!--Expand Of Backup-->
-                <Button Name="BackupButton" Background="Transparent" Margin="4,-22,410,0" Height="23" Cursor="Hand" RenderTransformOrigin="0.5,0.5">
+                <Button Name="BackupButton" Background="Transparent" Margin="4,-22,410,0" Height="23" Cursor="Hand" RenderTransformOrigin="0.5,0.5" Command="{Binding Animation.BackupExpand}">
                     <Button.RenderTransform>
                         <RotateTransform></RotateTransform>
                     </Button.RenderTransform>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MyMultiConverter}">
+                            <Binding ElementName="BackupPanel"></Binding>
+                            <Binding ElementName="BackupButton"></Binding>
+                        </MultiBinding>
+                    </Button.CommandParameter>
                     <Image Source="/Images/Expand.png" Height="21" Width="24"></Image>
                 </Button>
 

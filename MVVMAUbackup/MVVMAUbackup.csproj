@@ -34,10 +34,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Backup.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +70,7 @@
     <Compile Include="Models\BackupProgress.cs" />
     <Compile Include="Models\FolderModel.cs" />
     <Compile Include="Models\StatusModel.cs" />
+    <Compile Include="MultiConvertor\Convertor.cs" />
     <Compile Include="Serialization\Serializer.cs" />
     <Compile Include="ViewModels\FolderViewModel.cs" />
     <Compile Include="ViewModels\StatusViewModel.cs" />
@@ -105,11 +110,16 @@
   <ItemGroup>
     <None Include="Views\App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Backup.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Exit.png" />
     <Resource Include="Images\Expand.png" />
     <Resource Include="Images\Minimize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Backup.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

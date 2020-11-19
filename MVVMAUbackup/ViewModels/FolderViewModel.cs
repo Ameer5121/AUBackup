@@ -12,13 +12,14 @@ using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using MVVMAUbackup.Models;
 using MVVMAUbackup.Commands;
+using MVVMAUbackup.Animation;
 using MVVMAUbackup.Serialization;
 using System.Runtime.Serialization;
 
 namespace MVVMAUbackup.ViewModels
 {
     [Serializable]
-    class FolderViewModel : ISerializable
+    class FolderViewModel : ViewModelBase, ISerializable
     {
         #region Constructor
         public FolderViewModel()
@@ -29,7 +30,8 @@ namespace MVVMAUbackup.ViewModels
             _backupTimer.Interval = TimeSpan.FromSeconds(8);
             _backupTimer.Tick += BackupFolders;
             _backupTimer.Tick += RestartInterval;
-            _statusVM = new StatusViewModel();           
+            _statusVM = new StatusViewModel();
+            _animation = new Expand();
         }
         #endregion
 
@@ -37,6 +39,7 @@ namespace MVVMAUbackup.ViewModels
         private ObservableCollection<FolderModel> _folders;
         private static DispatcherTimer _backupTimer;
         private StatusViewModel _statusVM;
+        private Expand _animation;
         private static Stopwatch StopWatch = new Stopwatch();
         #endregion
 
@@ -45,6 +48,7 @@ namespace MVVMAUbackup.ViewModels
         public static DispatcherTimer BackupTimer => _backupTimer;
         public ObservableCollection<FolderModel> Folders => _folders;
         public StatusViewModel StatusVM => _statusVM;
+        public Expand Animation => _animation;
         #endregion
 
 
@@ -77,7 +81,7 @@ namespace MVVMAUbackup.ViewModels
                     MessageBox.Show("A folder of the same type already exists!");
                     return;
                 }                
-               _folders.Add(new FolderModel { Name = Path.GetFileName(OpenDialog.SelectedPath), FilePath = OpenDialog.SelectedPath });        
+               _folders.Add(new FolderModel { Name = Path.GetFileName(OpenDialog.SelectedPath), FilePath = OpenDialog.SelectedPath });
             }
         }
 
@@ -152,7 +156,6 @@ namespace MVVMAUbackup.ViewModels
 
         private async void BackupFolders(object sender, EventArgs e)
         {    
-            //MessageBox.Show("s");
              await Task.Run(() =>
              {
                 foreach (FolderModel Folder in _folders)
@@ -187,7 +190,7 @@ namespace MVVMAUbackup.ViewModels
                 return;
             }
             Serializer.Serialize(this);
-            //Environment.Exit(0);
+            Exit();
         }
             
         public FolderViewModel Deserialize()
@@ -205,13 +208,10 @@ namespace MVVMAUbackup.ViewModels
 
 
 
-        public FolderViewModel(SerializationInfo info, StreamingContext context)
+        public FolderViewModel(SerializationInfo info, StreamingContext context) : this()
         {
             _folders = (ObservableCollection<FolderModel>)info.GetValue("Folders", typeof(ObservableCollection<FolderModel>));
             _statusVM = (StatusViewModel)info.GetValue("Status", typeof(StatusViewModel));
-            _backupTimer = new DispatcherTimer();
-            _backupTimer.Tick += BackupFolders;
-            _backupTimer.Tick += RestartInterval;
             _backupTimer.Interval = (TimeSpan)info.GetValue("BackupTimerInterval", typeof(TimeSpan));
         }
         #endregion
