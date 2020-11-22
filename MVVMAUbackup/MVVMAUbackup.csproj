@@ -67,6 +67,7 @@
     </Page>
     <Compile Include="Animation\Expand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Events\MessageEventArgs.cs" />
     <Compile Include="Models\BackupProgress.cs" />
     <Compile Include="Models\FolderModel.cs" />
     <Compile Include="Models\StatusModel.cs" />
@@ -121,5 +122,6 @@
   <ItemGroup>
     <Resource Include="Backup.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

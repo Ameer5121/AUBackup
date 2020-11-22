@@ -6,6 +6,9 @@ using System.Windows.Forms;
 using System.Drawing;
 using MVVMAUbackup.Serialization;
 using MVVMAUbackup.ViewModels;
+using MVVMAUbackup.Events;
+using MVVMAUbackup.Commands;
+using System.Collections.Generic;
 
 namespace MVVMAUbackup
 {
@@ -14,8 +17,11 @@ namespace MVVMAUbackup
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Fields
         private FolderViewModel FM = new FolderViewModel();
         private static NotifyIcon Notify = new NotifyIcon();
+        #endregion
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,6 +33,7 @@ namespace MVVMAUbackup
             {
                 DataContext = FM;
             }
+            (this.DataContext as FolderViewModel).MessageBoxRequest += MessageDisplay;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) { DragMove();}
@@ -55,6 +62,11 @@ namespace MVVMAUbackup
             ShowInTaskbar = true;
         }
 
+        private void Exit(object sender, RoutedEventArgs e) { Environment.Exit(0); }
 
+        private void MessageDisplay(object sender, MessageEventArgs e)
+        {
+            System.Windows.MessageBox.Show(e.Message);
+        }
     }
 }

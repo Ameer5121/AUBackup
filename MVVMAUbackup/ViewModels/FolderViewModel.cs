@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using MVVMAUbackup.Models;
 using MVVMAUbackup.Commands;
+using MVVMAUbackup.Events;
 using MVVMAUbackup.Animation;
 using MVVMAUbackup.Serialization;
 using System.Runtime.Serialization;
@@ -19,7 +20,7 @@ using System.Runtime.Serialization;
 namespace MVVMAUbackup.ViewModels
 {
     [Serializable]
-    class FolderViewModel : ViewModelBase, ISerializable
+    class FolderViewModel : ISerializable
     {
         #region Constructor
         public FolderViewModel()
@@ -27,7 +28,7 @@ namespace MVVMAUbackup.ViewModels
 
             _folders = new ObservableCollection<FolderModel>();
             _backupTimer = new DispatcherTimer();
-            _backupTimer.Interval = TimeSpan.FromHours(8);
+            _backupTimer.Interval = TimeSpan.FromSeconds(8);
             _backupTimer.Tick += BackupFolders;
             _backupTimer.Tick += RestartInterval;
             _statusVM = new StatusViewModel();
@@ -59,7 +60,7 @@ namespace MVVMAUbackup.ViewModels
         public ICommand TargetName => new RelayCommand(BackupFolderName);
         public ICommand StartBackupProcess => new RelayCommand(StartTimer, CanStartTimer);
         public ICommand Save => new RelayCommand(Serialize);
-
+        public event EventHandler<MessageEventArgs> MessageBoxRequest;
         #endregion
 
 
@@ -78,7 +79,7 @@ namespace MVVMAUbackup.ViewModels
             {
                 if(_folders.Any(x => x.FilePath == OpenDialog.SelectedPath))
                 {
-                    MessageBox.Show("A folder of the same type already exists!");
+                    DisplayMessageBox("A folder of the same type already exists!");
                     return;
                 }                
                _folders.Add(new FolderModel { Name = Path.GetFileName(OpenDialog.SelectedPath), FilePath = OpenDialog.SelectedPath });
@@ -115,7 +116,7 @@ namespace MVVMAUbackup.ViewModels
             {
                 if (_folders.Any(x => x.FilePath == FolderModel.Target))
                 {
-                    MessageBox.Show("The Backup folder cannot be in the Folder list that you want to Backup!");
+                    DisplayMessageBox("The Backup folder cannot be in the Folder list that you want to Backup!");
                     return;
                 }
                 FolderModel.Target = OpenDialog.SelectedPath;
@@ -156,6 +157,7 @@ namespace MVVMAUbackup.ViewModels
 
         private  void BackupFolders(object sender, EventArgs e)
         {
+            MessageBox.Show("2");
              Task.Run(() =>
              {
                 foreach (FolderModel Folder in _folders)
@@ -173,8 +175,13 @@ namespace MVVMAUbackup.ViewModels
         /// <param name="e"></param>
         private void RestartInterval(object sender, EventArgs e)
         {
-            _backupTimer.Interval = TimeSpan.FromHours(8);
+            _backupTimer.Interval = TimeSpan.FromSeconds(8);
             StopWatch.Restart();
+        }
+
+        private void DisplayMessageBox(string Message)
+        {
+            MessageBoxRequest?.Invoke(this, new MessageEventArgs {Message = Message });
         }
         #endregion
 
@@ -185,11 +192,10 @@ namespace MVVMAUbackup.ViewModels
         {
             if (_backupTimer.IsEnabled)
             {
-                MessageBox.Show("Please pause the backup process before exiting.");
+                DisplayMessageBox("Please pause the backup process before exiting.");
                 return;
             }
             Serializer.Serialize(this);
-            Exit();
         }
             
         public FolderViewModel Deserialize()
