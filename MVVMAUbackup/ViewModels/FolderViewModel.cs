@@ -20,15 +20,14 @@ using System.Runtime.Serialization;
 namespace MVVMAUbackup.ViewModels
 {
     [Serializable]
-    class FolderViewModel : ISerializable
+    class FolderViewModel : ViewModelBase , ISerializable
     {
         #region Constructor
         public FolderViewModel()
         {
-
             _folders = new ObservableCollection<FolderModel>();
             _backupTimer = new DispatcherTimer();
-            _backupTimer.Interval = TimeSpan.FromSeconds(8);
+            _backupTimer.Interval = TimeSpan.FromHours(8);
             _backupTimer.Tick += BackupFolders;
             _backupTimer.Tick += RestartInterval;
             _statusVM = new StatusViewModel();
@@ -42,10 +41,20 @@ namespace MVVMAUbackup.ViewModels
         private StatusViewModel _statusVM;
         private Expand _animation;
         private static Stopwatch StopWatch = new Stopwatch();
+        private bool _isRunning;
         #endregion
 
 
         #region Properties
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set
+            {
+                _isRunning = value;
+                OnPropertyChanged();
+            }
+        }
         public static DispatcherTimer BackupTimer => _backupTimer;
         public ObservableCollection<FolderModel> Folders => _folders;
         public StatusViewModel StatusVM => _statusVM;
@@ -67,11 +76,12 @@ namespace MVVMAUbackup.ViewModels
         #region Methods
         private bool CanAddFolders()
         {
-            if (_backupTimer.IsEnabled)
+            if (IsRunning)
                 return false;
 
             return true;
         }
+
         private void AddFolders(object ExtraInformation)
         {           
             var OpenDialog = new FolderBrowserDialog();
@@ -89,7 +99,7 @@ namespace MVVMAUbackup.ViewModels
 
         private bool CanRemoveFolder()
         {
-            if (_backupTimer.IsEnabled)
+            if (IsRunning)
                 return false;
             
             return true;
@@ -103,7 +113,7 @@ namespace MVVMAUbackup.ViewModels
 
         private bool CanAddBackupFolder() // Target
         {
-            if (_backupTimer.IsEnabled)
+            if (IsRunning)
                 return false;
 
             return true;
@@ -137,27 +147,28 @@ namespace MVVMAUbackup.ViewModels
 
         private void StartTimer(object parameters)
         {         
-            if (_backupTimer.IsEnabled)
+            if (IsRunning)
             {
                 StopWatch.Stop();
                 PauseTimer(StopWatch);
                 return;
             }
+            IsRunning = true;
             _statusVM.StartProcess();
             _backupTimer.Start();
             StopWatch.Start();
         }
         private void PauseTimer(Stopwatch ElapsedTime)
         {
+            IsRunning = false;
             _backupTimer.Stop();
             _backupTimer.Interval -= TimeSpan.FromSeconds(ElapsedTime.Elapsed.TotalSeconds);    
             _statusVM.PauseProcess();
             StopWatch.Reset();
         }
 
-        private  void BackupFolders(object sender, EventArgs e)
+        private void BackupFolders(object sender, EventArgs e)
         {
-            MessageBox.Show("2");
              Task.Run(() =>
              {
                 foreach (FolderModel Folder in _folders)
@@ -175,7 +186,7 @@ namespace MVVMAUbackup.ViewModels
         /// <param name="e"></param>
         private void RestartInterval(object sender, EventArgs e)
         {
-            _backupTimer.Interval = TimeSpan.FromSeconds(8);
+            _backupTimer.Interval = TimeSpan.FromHours(8);
             StopWatch.Restart();
         }
 

@@ -292,18 +292,34 @@
                         </Button>
                         <!--End Of Add CurrentBackUpFolderInfo-->
 
-                        <Border x:Name="On" Opacity="0.1" Background="#FF25FF03" Margin="351,294,39,76" CornerRadius="100">
+                        <Border x:Name="On" Background="#FF25FF03" Margin="351,294,39,76" CornerRadius="100">
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding History.Time.IsBackupProcessRunning}" Value="false">
+                                        <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                            <Setter Property="Opacity" Value="1"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsRunning}" Value="False">
+                                            <Setter Property="Opacity" Value="0.1"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                        <Border x:Name="Off" Background="Red" Margin="385,294,5,76" CornerRadius="100">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                            <Setter Property="Opacity" Value="0.1"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsRunning}" Value="False">
                                             <Setter Property="Opacity" Value="1"></Setter>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
                         </Border>
-                        <Border x:Name="Off" Opacity="0.1" Background="Red" Margin="385,294,5,76" CornerRadius="100"></Border>
 
                         <Border Background="Black" Height="2" RenderTransformOrigin="0.5,0.5" Margin="0,380,0,14"/>
                         <Border Background="Black" Height="2" RenderTransformOrigin="0.5,0.5" Margin="0,286,0,105"></Border>

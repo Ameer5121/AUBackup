@@ -41,8 +41,8 @@ namespace MVVMAUbackup.ViewModels
         private DispatcherTimer _updateProgress;
         #endregion
 
-        
-        #region Properties
+
+        #region Properties       
         public ObservableCollection<StatusModel> Statuses => _statuses;
         public DispatcherTimer UpdateProgress => _updateProgress;
         #endregion
@@ -60,10 +60,9 @@ namespace MVVMAUbackup.ViewModels
         }
         private void UpdateElapsedTime(object sender, EventArgs e)
         {
-            var CurrentStatus = _statuses.First();
-            if(CurrentStatus.ElapsedTime != TimeSpan.FromSeconds(0))
+            if(_statuses[0].ElapsedTime != TimeSpan.FromSeconds(0))
             {
-                CurrentStatus.ElapsedTime -= TimeSpan.FromSeconds(1);
+                _statuses[0].ElapsedTime -= TimeSpan.FromSeconds(1);
                 return;
             }
             UpdateFinishedProcess();
@@ -72,21 +71,18 @@ namespace MVVMAUbackup.ViewModels
         public void PauseProcess()
         {
             _updateProgress.Stop();
-            var CurrentStatus = _statuses.First();
-            CurrentStatus.BackupStatus = nameof(BackupProgress.Paused);
+            _statuses[0].BackupStatus = nameof(BackupProgress.Paused);
         }
         public void StartProcess()
         {
             _updateProgress.Start();
-            var CurrentStatus = _statuses.First();
-            CurrentStatus.BackupStatus = nameof(BackupProgress.InProgress);
+            _statuses[0].BackupStatus = nameof(BackupProgress.InProgress);
         }
 
         public void UpdateFinishedProcess()
         {
-            var CurrentStatus = _statuses.First();
-            CurrentStatus.DateFinished = DateTime.Now;
-            CurrentStatus.BackupStatus = nameof(BackupProgress.Finished);
+            _statuses[0].DateFinished = DateTime.Now;
+            _statuses[0].BackupStatus = nameof(BackupProgress.Finished);
             AddStatus();
         }
         #endregion
