@@ -59,6 +59,10 @@ namespace MVVMAUbackup.ViewModels
         public ObservableCollection<FolderModel> Folders => _folders;
         public StatusViewModel StatusVM => _statusVM;
         public Expand Animation => _animation;
+
+        public event EventHandler<MessageEventArgs> MessageBoxRequest;
+
+        public event EventHandler Exit;
         #endregion
 
 
@@ -69,7 +73,6 @@ namespace MVVMAUbackup.ViewModels
         public ICommand TargetName => new RelayCommand(BackupFolderName);
         public ICommand StartBackupProcess => new RelayCommand(StartTimer, CanStartTimer);
         public ICommand Save => new RelayCommand(Serialize);
-        public event EventHandler<MessageEventArgs> MessageBoxRequest;
         #endregion
 
 
@@ -201,12 +204,13 @@ namespace MVVMAUbackup.ViewModels
 
         private void Serialize(object parameters)
         {
-            if (_backupTimer.IsEnabled)
+            if (IsRunning)
             {
                 DisplayMessageBox("Please pause the backup process before exiting.");
                 return;
             }
             Serializer.Serialize(this);
+            Exit?.Invoke(this, EventArgs.Empty);
         }
             
         public FolderViewModel Deserialize()

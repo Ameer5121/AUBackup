@@ -34,6 +34,7 @@ namespace MVVMAUbackup
                 DataContext = FM;
             }
             (this.DataContext as FolderViewModel).MessageBoxRequest += MessageDisplay;
+            (this.DataContext as FolderViewModel).Exit += Exit;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) { DragMove();}
@@ -62,7 +63,7 @@ namespace MVVMAUbackup
             ShowInTaskbar = true;
         }
 
-        private void Exit(object sender, RoutedEventArgs e) { Environment.Exit(0); }
+        private void Exit(object sender, EventArgs e) { Environment.Exit(0); }
 
         private void MessageDisplay(object sender, MessageEventArgs e)
         {

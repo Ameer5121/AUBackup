@@ -23,7 +23,7 @@
         <Border Background="#FF191919" Margin="0,0,0,444">
             <StackPanel>
                 <!--Exit Button-->
-                <Button Name="ExitButton" Background="Transparent" Height="37" Width="39" Margin="587,-5,0,0" Cursor="Hand" Foreground="#00000000" Command="{Binding Save}" Click="Exit">
+                <Button Name="ExitButton" Background="Transparent" Height="37" Width="39" Margin="587,-5,0,0" Cursor="Hand" Foreground="#00000000" Command="{Binding Save}">
                     <Image Source="/Images/Exit.png" Height="35" ></Image>
 
                     <Button.Style>
