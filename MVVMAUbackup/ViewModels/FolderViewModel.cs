@@ -92,7 +92,7 @@ namespace MVVMAUbackup.ViewModels
             {
                 if(_folders.Any(x => x.FilePath == OpenDialog.SelectedPath))
                 {
-                    DisplayMessageBox("A folder of the same type already exists!");
+                    MessageBoxRequest?.Invoke(this, new MessageEventArgs { Message = "A folder of the same type already exists!" });
                     return;
                 }                
                _folders.Add(new FolderModel { Name = Path.GetFileName(OpenDialog.SelectedPath), FilePath = OpenDialog.SelectedPath });
