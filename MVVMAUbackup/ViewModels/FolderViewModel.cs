@@ -60,7 +60,7 @@ namespace MVVMAUbackup.ViewModels
         public StatusViewModel StatusVM => _statusVM;
         public Expand Animation => _animation;
 
-        public event EventHandler<MessageEventArgs> MessageBoxRequest;
+        public event EventHandler<MessageEventArgs> DisplayAlert;
 
         public event EventHandler Exit;
         #endregion
@@ -92,7 +92,7 @@ namespace MVVMAUbackup.ViewModels
             {
                 if(_folders.Any(x => x.FilePath == OpenDialog.SelectedPath))
                 {
-                    MessageBoxRequest?.Invoke(this, new MessageEventArgs { Message = "A folder of the same type already exists!" });
+                    DisplayAlert?.Invoke(this, new MessageEventArgs { Message = "A folder of the same type already exists!" });
                     return;
                 }                
                _folders.Add(new FolderModel { Name = Path.GetFileName(OpenDialog.SelectedPath), FilePath = OpenDialog.SelectedPath });
@@ -129,7 +129,7 @@ namespace MVVMAUbackup.ViewModels
             {
                 if (_folders.Any(x => x.FilePath == FolderModel.Target))
                 {
-                    DisplayMessageBox("The Backup folder cannot be in the Folder list that you want to Backup!");
+                    DisplayAlert?.Invoke(this, new MessageEventArgs { Message = "The Backup folder cannot be in the Folder list that you want to Backup!" });
                     return;
                 }
                 FolderModel.Target = OpenDialog.SelectedPath;
@@ -195,7 +195,7 @@ namespace MVVMAUbackup.ViewModels
 
         private void DisplayMessageBox(string Message)
         {
-            MessageBoxRequest?.Invoke(this, new MessageEventArgs {Message = Message });
+            DisplayAlert?.Invoke(this, new MessageEventArgs {Message = Message });
         }
         #endregion
 
@@ -206,7 +206,7 @@ namespace MVVMAUbackup.ViewModels
         {
             if (IsRunning)
             {
-                DisplayMessageBox("Please pause the backup process before exiting.");
+                DisplayAlert?.Invoke(this, new MessageEventArgs { Message = "Please pause the backup process before exiting." });
                 return;
             }
             Serializer.Serialize(this);

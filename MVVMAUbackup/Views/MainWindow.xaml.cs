@@ -33,7 +33,7 @@ namespace MVVMAUbackup
             {
                 DataContext = FM;
             }
-            (this.DataContext as FolderViewModel).MessageBoxRequest += MessageDisplay;
+            (this.DataContext as FolderViewModel).DisplayAlert += MessageDisplay;
             (this.DataContext as FolderViewModel).Exit += Exit;
         }
 
