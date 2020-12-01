@@ -192,11 +192,6 @@ namespace MVVMAUbackup.ViewModels
             _backupTimer.Interval = TimeSpan.FromHours(8);
             StopWatch.Restart();
         }
-
-        private void DisplayMessageBox(string Message)
-        {
-            DisplayAlert?.Invoke(this, new MessageEventArgs {Message = Message });
-        }
         #endregion
 
 
