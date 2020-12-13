@@ -53,6 +53,7 @@ namespace MVVMAUbackup.ViewModels
             {
                 _isRunning = value;
                 OnPropertyChanged();
+                
             }
         }
         public static DispatcherTimer BackupTimer => _backupTimer;
@@ -138,7 +139,7 @@ namespace MVVMAUbackup.ViewModels
 
         private void BackupFolderName(object parameter)
         {
-            MessageBox.Show(FolderModel.Target);
+            DisplayAlert?.Invoke(this, new MessageEventArgs { Message = FolderModel.Target });
         }
 
         ///Backup:
@@ -205,6 +206,7 @@ namespace MVVMAUbackup.ViewModels
                 return;
             }
             Serializer.Serialize(this);
+            DisplayAlert?.Invoke(this, new MessageEventArgs { Message = "Your progress has been saved!" });
             Exit?.Invoke(this, EventArgs.Empty);
         }
             

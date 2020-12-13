@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MVVMAUbackup.ViewModels;
 
+
 namespace MVVMAUbackup.Models
 {
     [Serializable]
@@ -12,7 +13,7 @@ namespace MVVMAUbackup.Models
     {
         private string _name;
         private string _filepath;
-        public static string Target = null;
+        public static string Target;
 
         public string Name
         {
