@@ -3,6 +3,7 @@
 It sends your specified folders to your specified location every 8 hours.
 Additionally, it also saves your progress once you exit the application.
 
-# About the project
+# Framework
 
-* It is made in WPF using MVVM design pattern.
+* WPF
+  * MVVM Design pattern
